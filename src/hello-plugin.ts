@@ -32,7 +32,13 @@ export class HelloPlugin implements EditorPlugin {
     this.editor = null;
   }
 
-  willHandleEventExclusively() {}
+  getName() {
+    return "Hello Plugin";
+  }
+
+  willHandleEventExclusively() {
+    return true;
+  }
 
   onPluginEvent(event: PluginEvent) {
     if (event.eventType === PluginEventType.KeyPress) {

@@ -17,8 +17,7 @@
     "roosterjs-html-sanitizer": "1.6.0",
     "roosterjs-react": "0.0.72",
     "roosterjs-react-common": "0.0.71",
-    "roosterjs-react-ribbon": "0.0.72",
-    "react-scripts-ts": "^2.13.0"
+    "roosterjs-react-ribbon": "0.0.72"
   },
   "scripts": {
     "start": "react-scripts start",

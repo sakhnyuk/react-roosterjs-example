@@ -4,7 +4,7 @@ import { createEditorViewState, EmojiPlugin } from "roosterjs-react";
 import { Ribbon, RibbonPlugin } from "roosterjs-react-ribbon";
 
 import ReactEditor from "./ReactEditor";
-import ribbonButtonRenderer from "./ribbonButtonRenderer";
+import { ribbonButtonRenderer } from "./ribbonButtonRenderer";
 
 const container = document.getElementById("root");
 const viewState = createEditorViewState("Hello ReactEditor!");
@@ -12,7 +12,7 @@ const ribbonPlugin = new RibbonPlugin();
 const emojiPlugin = new EmojiPlugin();
 const emojiButton = {
   name: "btnEmoji",
-  onClick: editor => emojiPlugin.startEmoji()
+  onClick: (editor) => emojiPlugin.startEmoji()
 };
 const ribbonButtons = [
   "emoji",
