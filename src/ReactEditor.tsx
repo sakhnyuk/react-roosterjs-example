@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Editor, EditorOptions, EditorPlugin, UndoService } from 'roosterjs-editor-core';
-import { HtmlSanitizer } from 'roosterjs-editor-dom';
-import { ContentEdit, HyperLink, Paste } from 'roosterjs-editor-plugins';
-import { DefaultFormat } from 'roosterjs-editor-types';
-import { EditorViewState } from 'roosterjs-react';
+import {Editor, EditorOptions, EditorPlugin, UndoService} from 'roosterjs-editor-core';
+import {HtmlSanitizer} from 'roosterjs-editor-dom';
+import {ContentEdit, HyperLink, Paste} from 'roosterjs-editor-plugins';
+import {DefaultFormat} from 'roosterjs-editor-types';
+import {EditorViewState} from 'roosterjs-react';
 
-import { HelloPlugin } from './hello-plugin';
+import {HelloPlugin} from './hello-plugin';
 
 export interface ReactEditorProps {
   viewState: EditorViewState;
@@ -20,9 +20,14 @@ export interface ReactEditorProps {
 }
 
 export default class ReactEditor extends React.Component<ReactEditorProps, {}> {
-  private contentDiv: HTMLDivElement;
-  private editor: Editor | null;
-  private updateViewStateWhenUnmount: boolean;
+  private readonly contentDiv: React.RefObject<HTMLDivElement>;
+  private editor: Editor | null = null;
+  private updateViewStateWhenUnmount: boolean = false;
+
+  constructor(props) {
+    super(props);
+    this.contentDiv = React.createRef<HTMLDivElement>();
+  }
 
   render() {
     let { className, isRtl } = this.props;
@@ -31,13 +36,14 @@ export default class ReactEditor extends React.Component<ReactEditorProps, {}> {
         dir={isRtl ? 'rtl' : 'ltr'}
         className={className}
         onBlur={this.onBlur}
-        ref={this.onContentDivRef}
+        ref={this.contentDiv}
       />
     );
   }
 
   componentDidMount() {
-    this.editor = new Editor(this.contentDiv, this.getEditorOptions());
+    if (!this.contentDiv.current) return;
+    this.editor = new Editor(this.contentDiv.current, this.getEditorOptions());
     this.updateViewStateWhenUnmount = true;
     this.updateContentToViewState(true /*isInitializing*/);
   }
@@ -53,7 +59,7 @@ export default class ReactEditor extends React.Component<ReactEditorProps, {}> {
 
   updateContentToViewState(isInitializing?: boolean) {
     if (this.editor) {
-      let updateViewState = this.props.updateViewState || this.updateViewState;
+      let updateViewState = this.props.updateViewState || ReactEditor.updateViewState;
       updateViewState(this.props.viewState, this.editor.getContent(), !!isInitializing);
     }
   }
@@ -77,17 +83,16 @@ export default class ReactEditor extends React.Component<ReactEditorProps, {}> {
     }
 
     let initialContent = HtmlSanitizer.convertInlineCss(viewState.content);
-    let options: EditorOptions = {
+
+    return {
       plugins: allPlugins,
       defaultFormat: defaultFormat,
       undo: undo,
       initialContent: initialContent,
     };
-
-    return options;
   }
 
-  private updateViewState(viewState: EditorViewState, content: string, isInitializing: boolean) {
+  private static updateViewState(viewState: EditorViewState, content: string, isInitializing: boolean) {
     if (viewState.content != content) {
       viewState.content = content;
       if (!isInitializing) {
@@ -101,9 +106,5 @@ export default class ReactEditor extends React.Component<ReactEditorProps, {}> {
     if (this.props.onBlur) {
       this.props.onBlur(ev);
     }
-  };
-
-  private onContentDivRef = (ref: HTMLDivElement) => {
-    this.contentDiv = ref;
   };
 }
