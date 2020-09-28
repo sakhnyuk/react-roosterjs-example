@@ -1,26 +1,17 @@
-import * as React from "react";
-import {
-  Editor,
-  EditorOptions,
-  EditorPlugin,
-  UndoService
-} from "roosterjs-editor-core";
-import { HtmlSanitizer } from "roosterjs-editor-dom";
-import { ContentEdit, HyperLink, Paste } from "roosterjs-editor-plugins";
-import { DefaultFormat } from "roosterjs-editor-types";
-import { EditorViewState } from "roosterjs-react";
+import * as React from 'react';
+import { Editor, EditorOptions, EditorPlugin, UndoService } from 'roosterjs-editor-core';
+import { HtmlSanitizer } from 'roosterjs-editor-dom';
+import { ContentEdit, HyperLink, Paste } from 'roosterjs-editor-plugins';
+import { DefaultFormat } from 'roosterjs-editor-types';
+import { EditorViewState } from 'roosterjs-react';
 
-import { HelloPlugin } from "./hello-plugin";
+import { HelloPlugin } from './hello-plugin';
 
 export interface ReactEditorProps {
   viewState: EditorViewState;
   className?: string;
   plugins?: EditorPlugin[];
-  updateViewState?: (
-    viewState: EditorViewState,
-    content: string,
-    isInitializing: boolean
-  ) => void;
+  updateViewState?: (viewState: EditorViewState, content: string, isInitializing: boolean) => void;
   undo?: UndoService;
   isRtl?: boolean;
   hyperlinkToolTipCallback?: (href: string) => string;
@@ -37,7 +28,7 @@ export default class ReactEditor extends React.Component<ReactEditorProps, {}> {
     let { className, isRtl } = this.props;
     return (
       <div
-        dir={isRtl ? "rtl" : "ltr"}
+        dir={isRtl ? 'rtl' : 'ltr'}
         className={className}
         onBlur={this.onBlur}
         ref={this.onContentDivRef}
@@ -63,11 +54,7 @@ export default class ReactEditor extends React.Component<ReactEditorProps, {}> {
   updateContentToViewState(isInitializing?: boolean) {
     if (this.editor) {
       let updateViewState = this.props.updateViewState || this.updateViewState;
-      updateViewState(
-        this.props.viewState,
-        this.editor.getContent(),
-        !!isInitializing
-      );
+      updateViewState(this.props.viewState, this.editor.getContent(), !!isInitializing);
     }
   }
 
@@ -76,19 +63,13 @@ export default class ReactEditor extends React.Component<ReactEditorProps, {}> {
   }
 
   private getEditorOptions(): EditorOptions {
-    let {
-      plugins,
-      viewState,
-      undo,
-      hyperlinkToolTipCallback,
-      defaultFormat
-    } = this.props;
+    let { plugins, viewState, undo, hyperlinkToolTipCallback, defaultFormat } = this.props;
 
     let allPlugins: EditorPlugin[] = [
       new ContentEdit(),
       new HyperLink(hyperlinkToolTipCallback),
       new Paste(true /*useDirectPaste*/),
-      new HelloPlugin()
+      new HelloPlugin(),
     ];
 
     if (plugins) {
@@ -100,17 +81,13 @@ export default class ReactEditor extends React.Component<ReactEditorProps, {}> {
       plugins: allPlugins,
       defaultFormat: defaultFormat,
       undo: undo,
-      initialContent: initialContent
+      initialContent: initialContent,
     };
 
     return options;
   }
 
-  private updateViewState(
-    viewState: EditorViewState,
-    content: string,
-    isInitializing: boolean
-  ) {
+  private updateViewState(viewState: EditorViewState, content: string, isInitializing: boolean) {
     if (viewState.content != content) {
       viewState.content = content;
       if (!isInitializing) {

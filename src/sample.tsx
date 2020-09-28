@@ -10,41 +10,47 @@ const container = document.getElementById('container');
 const viewState = createEditorViewState('Hello ReactEditor!');
 const ribbonPlugin = new RibbonPlugin();
 const emojiPlugin = new EmojiPlugin();
-const emojiButton = { name: 'btnEmoji', onClick: editor => emojiPlugin.startEmoji() };
+const emojiButton = { name: 'btnEmoji', onClick: (editor) => emojiPlugin.startEmoji() };
 const ribbonButtons = [
-    'emoji',
-    'bold',
-    'italic',
-    'underline',
-    'font',
-    'size',
-    'bkcolor',
-    'color',
-    'bullet',
-    'number',
-    'indent',
-    'outdent',
-    'quote',
-    'left',
-    'center',
-    'right',
-    'link',
-    'unlink',
-    'sub',
-    'super',
-    'strike',
-    'alttext',
-    'ltr',
-    'rtl',
-    'undo',
-    'redo',
-    'unformat'
+  'emoji',
+  'bold',
+  'italic',
+  'underline',
+  'font',
+  'size',
+  'bkcolor',
+  'color',
+  'bullet',
+  'number',
+  'indent',
+  'outdent',
+  'quote',
+  'left',
+  'center',
+  'right',
+  'link',
+  'unlink',
+  'sub',
+  'super',
+  'strike',
+  'alttext',
+  'ltr',
+  'rtl',
+  'undo',
+  'redo',
+  'unformat',
 ];
 const editor = (
-    <div>
-        <Ribbon ribbonPlugin={ribbonPlugin} className={'myRibbon'} buttonRenderer={ribbonButtonRenderer} buttonNames={ribbonButtons} additionalButtons={{ emoji: emojiButton }} />
-        <ReactEditor className={'editor'} viewState={viewState} plugins={[ribbonPlugin, emojiPlugin]} />
-    </div>
+  <div>
+    <Ribbon
+      ribbonPlugin={ribbonPlugin}
+      className={'myRibbon'}
+      buttonRenderer={ribbonButtonRenderer}
+      buttonNames={ribbonButtons}
+      additionalButtons={{ emoji: emojiButton }}
+    />
+    <ReactEditor className={'editor'} viewState={viewState} plugins={[ribbonPlugin, emojiPlugin]} />
+  </div>
 );
 window.addEventListener('resize', () => ribbonPlugin.resize());
 ReactDom.render(editor, container, null);
